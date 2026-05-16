@@ -6,19 +6,22 @@ import { authMiddleware } from '../middleware/auth'
 
 const adminRouter = new Hono<{ Bindings: Env }>()
 
-// Auth middleware applied to all admin routes
+// POST /api/admin/auth - validate admin key (NO auth required)
+adminRouter.post('/auth', async (c) => {
+  const body = await c.req.json<{ key: string }>()
+  if (!body.key || body.key !== c.env.ADMIN_KEY) {
+    return c.json({ success: false, error: '密钥错误' }, 401)
+  }
+  return c.json({ success: true, data: { valid: true } })
+})
+
+// Auth middleware applied to all other admin routes
 adminRouter.use('*', async (c, next) => {
   const adminKey = c.req.header('X-Admin-Key')
   if (!adminKey || adminKey !== c.env.ADMIN_KEY) {
     return c.json({ success: false, error: '未授权的访问' }, 401)
   }
   await next()
-})
-
-// POST /api/admin/auth - validate admin key
-adminRouter.post('/auth', async (c) => {
-  // Auth is already verified by middleware above
-  return c.json({ success: true, data: { valid: true } })
 })
 
 // GET /api/admin/cards - list all cards
