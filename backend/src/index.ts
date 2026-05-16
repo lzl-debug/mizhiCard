@@ -2,6 +2,7 @@ import { Hono } from 'hono'
 import type { Env } from './types'
 import { cardsRouter } from './routes/cards'
 import { adminRouter } from './routes/admin'
+import { getImage } from './services/imageService'
 
 const app = new Hono<{ Bindings: Env }>()
 
@@ -27,6 +28,26 @@ app.use('*', async (c, next) => {
 // Health check
 app.get('/api/health', (c) => {
   return c.json({ success: true, data: { status: 'ok', timestamp: new Date().toISOString() } })
+})
+
+// Image serving endpoint (proxied from KV)
+app.get('/api/images/:key', async (c) => {
+  try {
+    const key = c.req.param('key')
+    const result = await getImage(key, c.env)
+    if (!result) {
+      return new Response('Image not found', { status: 404 })
+    }
+    return new Response(result.data, {
+      status: 200,
+      headers: {
+        'Content-Type': result.contentType,
+        'Cache-Control': 'public, max-age=31536000',
+      },
+    })
+  } catch {
+    return new Response('Image not found', { status: 404 })
+  }
 })
 
 // Mount routes

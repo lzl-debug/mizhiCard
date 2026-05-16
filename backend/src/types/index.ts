@@ -10,10 +10,6 @@ export interface Card {
   updatedAt: string
 }
 
-export interface AdminCard extends Card {
-  imageKey: string
-}
-
 export interface CreateCardInput {
   name: string
   rarity: Rarity
@@ -32,8 +28,7 @@ export interface ApiResponse<T = unknown> {
 
 export interface Env {
   DB: D1Database
-  CARD_IMAGES: R2Bucket
+  CARD_IMAGES: KVNamespace
   ADMIN_KEY: string
   ALLOWED_ORIGIN: string
-  R2_PUBLIC_URL: string
 }

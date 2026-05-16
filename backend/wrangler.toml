@@ -6,15 +6,14 @@ compatibility_flags = ["nodejs_compat"]
 [[d1_databases]]
 binding = "DB"
 database_name = "mizhi-card-db"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "dc3a7fc5-3b90-4c6a-805d-a0ae8ec1c98b"
 
-[[r2_buckets]]
+[[kv_namespaces]]
 binding = "CARD_IMAGES"
-bucket_name = "mizhi-card-images"
+id = "476ae98caf03486fa32786fcbc59cc75"
 
 [env.production.vars]
 ALLOWED_ORIGIN = "https://mizhi-card.pages.dev"
-R2_PUBLIC_URL = "https://mizhi-card-images.REPLACE_ACCOUNT_ID.r2.cloudflarestorage.com"
 
 [[env.production.routes]]
 pattern = "api.mizhi-card.pages.dev/*"
