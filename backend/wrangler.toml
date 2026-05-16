@@ -1,0 +1,20 @@
+name = "mizhi-card-api"
+main = "src/index.ts"
+compatibility_date = "2025-05-16"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "mizhi-card-db"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+
+[[r2_buckets]]
+binding = "CARD_IMAGES"
+bucket_name = "mizhi-card-images"
+
+[env.production.vars]
+ALLOWED_ORIGIN = "https://mizhi-card.pages.dev"
+R2_PUBLIC_URL = "https://mizhi-card-images.REPLACE_ACCOUNT_ID.r2.cloudflarestorage.com"
+
+[[env.production.routes]]
+pattern = "api.mizhi-card.pages.dev/*"

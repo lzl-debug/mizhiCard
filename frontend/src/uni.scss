@@ -1,0 +1,10 @@
+@import '@/styles/variables.scss';
+@import '@/styles/animations.scss';
+
+/* uni-app 全局样式覆盖 */
+uni-page-body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  min-height: 100vh;
+}
