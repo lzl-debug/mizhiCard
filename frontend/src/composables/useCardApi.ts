@@ -14,6 +14,15 @@ const isLoading = ref(false)
 const isLoaded = ref(false)
 const error = ref<string | null>(null)
 
+// Resolve relative image URLs against the API base
+const API_BASE = import.meta.env.VITE_API_BASE || '/api'
+const IMAGE_ORIGIN = API_BASE.startsWith('http') ? API_BASE.replace(/\/api$/, '') : ''
+
+function resolveImageUrl(path: string): string {
+  if (!IMAGE_ORIGIN) return path
+  return IMAGE_ORIGIN + path
+}
+
 export function useCardApi() {
   async function fetchCards(): Promise<Card[]> {
     if (isLoaded.value && cardPool.value.length > 0) {
@@ -26,9 +35,13 @@ export function useCardApi() {
     try {
       const res = await get<Card[]>('/cards')
       if (res.success && res.data) {
-        cardPool.value = res.data
+        const cards = res.data.map((c: Card) => ({
+          ...c,
+          imageUrl: resolveImageUrl(c.imageUrl),
+        }))
+        cardPool.value = cards
         isLoaded.value = true
-        return res.data
+        return cards
       } else {
         throw new Error(res.error || '获取卡牌失败')
       }
