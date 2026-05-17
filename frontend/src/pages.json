@@ -8,15 +8,6 @@
         "navigationBarTextStyle": "black",
         "backgroundColor": "#f5f5f7"
       }
-    },
-    {
-      "path": "pages/collection/collection",
-      "style": {
-        "navigationBarTitleText": "收藏",
-        "navigationStyle": "custom",
-        "navigationBarTextStyle": "black",
-        "backgroundColor": "#f5f5f7"
-      }
     }
   ],
   "globalStyle": {

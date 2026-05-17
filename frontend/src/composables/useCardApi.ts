@@ -1,15 +1,12 @@
 import { ref } from 'vue'
 import { get } from '../utils/request'
-import type { Rarity } from '../utils/rarity'
 
 export interface Card {
   id: string
   name: string
-  rarity: Rarity
   imageKey: string
   imageUrl: string
   createdAt: string
-  updatedAt: string
 }
 
 const cardPool = ref<Card[]>([])
