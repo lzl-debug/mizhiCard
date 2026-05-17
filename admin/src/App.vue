@@ -196,7 +196,6 @@ function removeFile(i: number) {
   selectedFiles.value.splice(i, 1)
   URL.revokeObjectURL(previews.value[i])
   previews.value.splice(i, 1)
-  fileDims.value.splice(i, 1)
 }
 
 async function handleUpload() {
