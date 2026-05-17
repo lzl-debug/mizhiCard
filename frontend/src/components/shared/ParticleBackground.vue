@@ -93,16 +93,15 @@ function animate() {
     // Draw particle with glow
     ctx.beginPath()
     ctx.arc(p.x, p.y, p.radius + excitementBoost, 0, Math.PI * 2)
-    ctx.fillStyle = props.accentColor
-      ? `${props.accentColor}${Math.floor(p.alpha * 255)
-          .toString(16)
-          .padStart(2, '0')}`
-      : `rgba(255, 255, 255, ${p.alpha})`
+    const color = props.accentColor || '#6366F1'
+    ctx.fillStyle = `${color}${Math.floor(p.alpha * 255)
+      .toString(16)
+      .padStart(2, '0')}`
     ctx.fill()
   }
 
   // Draw connections between nearby particles
-  ctx.strokeStyle = `rgba(255, 255, 255, ${0.03 + excitementBoost * 0.05})`
+  ctx.strokeStyle = `rgba(99, 102, 241, ${0.04 + excitementBoost * 0.06})`
   ctx.lineWidth = 0.5
   for (let i = 0; i < particles.length; i++) {
     for (let j = i + 1; j < particles.length; j++) {

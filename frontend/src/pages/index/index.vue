@@ -208,7 +208,7 @@ onMounted(() => {
   color: var(--text-primary);
   margin: 0;
   letter-spacing: 0.15em;
-  background: linear-gradient(135deg, #e8e8ed, #a0a0c0);
+  background: linear-gradient(135deg, #1a1a2e, #6b6b80);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -361,7 +361,7 @@ onMounted(() => {
 .loading-spinner {
   width: 36px;
   height: 36px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(0, 0, 0, 0.08);
   border-top-color: var(--accent-primary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
@@ -416,8 +416,8 @@ onMounted(() => {
   gap: 10px;
   padding: 8px 12px;
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .history-cards {

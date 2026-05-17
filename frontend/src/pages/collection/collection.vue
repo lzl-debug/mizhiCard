@@ -155,7 +155,7 @@ function handleNavigate(path: string) {
 }
 
 .filter-btn.active {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(99, 102, 241, 0.08);
   color: var(--text-primary);
   border-color: color-mix(in srgb, var(--filter-color, #6366F1) 50%, transparent);
   box-shadow: 0 0 12px color-mix(in srgb, var(--filter-color, #6366F1) 20%, transparent);

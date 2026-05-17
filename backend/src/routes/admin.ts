@@ -2,7 +2,6 @@ import { Hono } from 'hono'
 import type { Env, Rarity } from '../types'
 import { getAllCards, createCard, updateCard, deleteCard } from '../services/cardService'
 import { validateAndUploadImage, deleteImage } from '../services/imageService'
-import { authMiddleware } from '../middleware/auth'
 
 const adminRouter = new Hono<{ Bindings: Env }>()
 
@@ -34,35 +33,41 @@ adminRouter.get('/cards', async (c) => {
   }
 })
 
-// POST /api/admin/cards - create a new card with image upload
+// POST /api/admin/cards - create cards with image upload (single or batch)
 adminRouter.post('/cards', async (c) => {
   try {
     const formData = await c.req.formData()
-    const image = formData.get('image') as File | null
-    const name = formData.get('name') as string | null
-    const rarity = formData.get('rarity') as string | null
+    const images = formData.getAll('image') as File[]
+    const name = (formData.get('name') as string | null)?.trim() || null
+    const rarity = (formData.get('rarity') as string | null) || null
 
-    if (!image || !name || !rarity) {
-      return c.json({ success: false, error: '缺少必填字段：image, name, rarity' }, 400)
+    if (images.length === 0) {
+      return c.json({ success: false, error: '至少需要上传一张图片' }, 400)
     }
 
-    if (!['SSR', 'SR', 'R', 'N'].includes(rarity)) {
+    if (rarity && !['SSR', 'SR', 'R', 'N'].includes(rarity)) {
       return c.json({ success: false, error: '稀有度必须是 SSR, SR, R 或 N' }, 400)
     }
 
-    if (name.length < 1 || name.length > 50) {
+    if (name && (name.length < 1 || name.length > 50)) {
       return c.json({ success: false, error: '卡牌名称长度必须在 1-50 个字符之间' }, 400)
     }
 
-    const { imageKey, imageUrl } = await validateAndUploadImage(image, c.env)
-    const card = await createCard(
-      { name, rarity: rarity as Rarity },
-      imageKey,
-      imageUrl,
-      c.env
-    )
+    const results = []
+    for (let i = 0; i < images.length; i++) {
+      const image = images[i]
+      const { imageKey, imageUrl } = await validateAndUploadImage(image, c.env)
+      const cardName = name || image.name.replace(/\.[^.]+$/, '') || `Card-${i + 1}`
+      const card = await createCard(
+        { name: cardName.slice(0, 50), rarity: (rarity as Rarity) || 'N' },
+        imageKey,
+        imageUrl,
+        c.env
+      )
+      results.push(card)
+    }
 
-    return c.json({ success: true, data: card }, 201)
+    return c.json({ success: true, data: results.length === 1 ? results[0] : results }, 201)
   } catch (error) {
     const message = error instanceof Error ? error.message : '创建卡牌失败'
     const status = message.includes('图片比例') || message.includes('解析图片') ? 400 : 500
@@ -104,7 +109,7 @@ adminRouter.delete('/cards/:id', async (c) => {
       return c.json({ success: false, error: '卡牌不存在' }, 404)
     }
 
-    // Clean up the image from R2
+    // Clean up the image from KV
     try {
       await deleteImage(card.imageKey, c.env)
     } catch {

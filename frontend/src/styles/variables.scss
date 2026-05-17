@@ -1,42 +1,42 @@
-/* ===== Design Tokens - Dark Gaming Aesthetic ===== */
+/* ===== Design Tokens - Light Elegant Aesthetic ===== */
 
 :root {
   /* Background */
-  --bg-primary: #0a0a0f;
-  --bg-secondary: #12121a;
-  --bg-card: #181825;
-  --bg-glass: rgba(255, 255, 255, 0.03);
-  --bg-glass-hover: rgba(255, 255, 255, 0.06);
+  --bg-primary: #f5f5f7;
+  --bg-secondary: #eeeef1;
+  --bg-card: #ffffff;
+  --bg-glass: rgba(255, 255, 255, 0.6);
+  --bg-glass-hover: rgba(255, 255, 255, 0.8);
 
   /* Text */
-  --text-primary: #e8e8ed;
-  --text-secondary: #8888a0;
-  --text-muted: #555570;
+  --text-primary: #1a1a2e;
+  --text-secondary: #6b6b80;
+  --text-muted: #999aaf;
 
   /* Rarity Colors */
-  --rarity-ssr: #FFD700;
-  --rarity-ssr-glow: rgba(255, 215, 0, 0.6);
-  --rarity-ssr-bg: rgba(255, 215, 0, 0.08);
-  --rarity-sr: #A855F7;
-  --rarity-sr-glow: rgba(168, 85, 247, 0.6);
-  --rarity-sr-bg: rgba(168, 85, 247, 0.08);
-  --rarity-r: #3B82F6;
-  --rarity-r-glow: rgba(59, 130, 246, 0.5);
-  --rarity-r-bg: rgba(59, 130, 246, 0.08);
-  --rarity-n: #4ADE80;
-  --rarity-n-glow: rgba(74, 222, 128, 0.4);
-  --rarity-n-bg: rgba(74, 222, 128, 0.08);
+  --rarity-ssr: #D4A017;
+  --rarity-ssr-glow: rgba(212, 160, 23, 0.5);
+  --rarity-ssr-bg: rgba(212, 160, 23, 0.08);
+  --rarity-sr: #9333EA;
+  --rarity-sr-glow: rgba(147, 51, 234, 0.5);
+  --rarity-sr-bg: rgba(147, 51, 234, 0.08);
+  --rarity-r: #2563EB;
+  --rarity-r-glow: rgba(37, 99, 235, 0.45);
+  --rarity-r-bg: rgba(37, 99, 235, 0.08);
+  --rarity-n: #16A34A;
+  --rarity-n-glow: rgba(22, 163, 74, 0.35);
+  --rarity-n-bg: rgba(22, 163, 74, 0.08);
 
   /* Accent */
   --accent-primary: #6366F1;
-  --accent-primary-glow: rgba(99, 102, 241, 0.4);
+  --accent-primary-glow: rgba(99, 102, 241, 0.35);
   --accent-danger: #EF4444;
   --accent-success: #22C55E;
 
   /* Border */
-  --border-subtle: rgba(255, 255, 255, 0.06);
-  --border-medium: rgba(255, 255, 255, 0.1);
-  --border-strong: rgba(255, 255, 255, 0.15);
+  --border-subtle: rgba(0, 0, 0, 0.06);
+  --border-medium: rgba(0, 0, 0, 0.1);
+  --border-strong: rgba(0, 0, 0, 0.15);
 
   /* Typography */
   --font-display: 'Noto Serif SC', 'STSong', 'SimSun', serif;
@@ -59,10 +59,10 @@
   --radius-full: 9999px;
 
   /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
-  --shadow-xl: 0 16px 64px rgba(0, 0, 0, 0.6);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 16px 64px rgba(0, 0, 0, 0.12);
 
   /* Transitions */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -75,16 +75,16 @@
 }
 
 /* Glassmorphism Mixin */
-@mixin glass-surface($opacity: 0.04, $blur: 16px) {
+@mixin glass-surface($opacity: 0.6, $blur: 16px) {
   background: rgba(255, 255, 255, $opacity);
   backdrop-filter: blur($blur);
   -webkit-backdrop-filter: blur($blur);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 @mixin glass-glow($color, $intensity: 0.3) {
   box-shadow:
-    0 0 20px rgba($color, $intensity * 0.5),
-    0 0 60px rgba($color, $intensity * 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 0 20px rgba($color, $intensity * 0.4),
+    0 0 60px rgba($color, $intensity * 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }

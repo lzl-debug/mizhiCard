@@ -5,8 +5,8 @@
       "style": {
         "navigationBarTitleText": "秘之卡",
         "navigationStyle": "custom",
-        "navigationBarTextStyle": "white",
-        "backgroundColor": "#0a0a0f"
+        "navigationBarTextStyle": "black",
+        "backgroundColor": "#f5f5f7"
       }
     },
     {
@@ -14,14 +14,14 @@
       "style": {
         "navigationBarTitleText": "收藏",
         "navigationStyle": "custom",
-        "navigationBarTextStyle": "white",
-        "backgroundColor": "#0a0a0f"
+        "navigationBarTextStyle": "black",
+        "backgroundColor": "#f5f5f7"
       }
     }
   ],
   "globalStyle": {
-    "navigationBarTextStyle": "white",
-    "navigationBarBackgroundColor": "#0a0a0f",
-    "backgroundColor": "#0a0a0f"
+    "navigationBarTextStyle": "black",
+    "navigationBarBackgroundColor": "#f5f5f7",
+    "backgroundColor": "#f5f5f7"
   }
 }

@@ -46,8 +46,8 @@ const rarities = computed(() =>
   gap: 12px;
   padding: 12px 16px;
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   overflow-x: auto;
 }
 
@@ -82,6 +82,6 @@ const rarities = computed(() =>
 .stat-divider {
   width: 1px;
   height: 28px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.08);
 }
 </style>

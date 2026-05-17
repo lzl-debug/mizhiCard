@@ -54,10 +54,10 @@ function navigateTo(path: string) {
   align-items: center;
   height: 64px;
   padding: 0 12px 8px;
-  background: rgba(10, 10, 15, 0.85);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
   z-index: 100;
   padding-bottom: max(8px, env(safe-area-inset-bottom));
 }
