@@ -9,21 +9,8 @@
       </header>
 
       <div class="draw-area">
-        <!-- Loading -->
-        <div v-if="isLoading" class="loading-state">
-          <div class="loading-spinner" />
-          <p>正在连接卡池...</p>
-        </div>
-
-        <!-- Empty -->
-        <div v-else-if="pool.length === 0" class="empty-state">
-          <div class="empty-icon">🃏</div>
-          <p class="empty-title">卡池为空</p>
-          <p class="empty-desc">请联系管理员添加卡牌</p>
-        </div>
-
         <!-- Card Display -->
-        <div v-else class="card-stage">
+        <div class="card-stage">
           <div class="card-container" :class="{ 'is-flipped': showCard }">
             <div class="card-face card-back">
               <div class="card-back-inner">
@@ -35,12 +22,15 @@
             </div>
             <div class="card-face card-front">
               <img v-if="currentCard" :src="currentCard.imageUrl" class="card-img" />
+              <div v-else class="card-loading">
+                <div class="loading-spinner" />
+              </div>
             </div>
           </div>
 
           <p v-if="currentCard" class="card-label">{{ currentCard.name }}</p>
 
-          <div v-if="drawCount > 0" class="draw-counter">
+          <div class="draw-counter">
             已抽卡 <strong>{{ drawCount }}</strong> 次
           </div>
         </div>
@@ -48,7 +38,7 @@
         <!-- Draw Button -->
         <button
           class="draw-btn"
-          :disabled="isDrawing || pool.length === 0 || isLoading"
+          :disabled="isDrawing || pool.length === 0"
           @click="handleDraw"
         >
           <span v-if="isDrawing" class="btn-spinner" />
@@ -64,31 +54,47 @@ import { ref, onMounted } from 'vue'
 import { useCardApi, type Card } from '../../composables/useCardApi'
 import ParticleBackground from '../../components/shared/ParticleBackground.vue'
 
-const { cardPool: pool, isLoading, fetchCards } = useCardApi()
+const { cardPool: pool, fetchCards } = useCardApi()
 
 const currentCard = ref<Card | null>(null)
 const showCard = ref(false)
 const isDrawing = ref(false)
 const drawCount = ref(0)
 
+function randomCard(): Card | null {
+  if (pool.value.length === 0) return null
+  return pool.value[Math.floor(Math.random() * pool.value.length)]
+}
+
 function handleDraw() {
   if (isDrawing.value || pool.value.length === 0) return
 
   isDrawing.value = true
+
+  // Flip back to hide current card
   showCard.value = false
 
-  const card = pool.value[Math.floor(Math.random() * pool.value.length)]
-
   setTimeout(() => {
-    currentCard.value = card
+    // Pick new card and reveal
+    const card = randomCard()
+    if (card) {
+      currentCard.value = card
+      drawCount.value++
+    }
     showCard.value = true
-    drawCount.value++
     isDrawing.value = false
-  }, 400)
+  }, 700)
 }
 
-onMounted(() => {
-  fetchCards()
+onMounted(async () => {
+  await fetchCards()
+  // Show a random card on first load
+  const card = randomCard()
+  if (card) {
+    currentCard.value = card
+    // Small delay so the CSS transition registered
+    setTimeout(() => { showCard.value = true }, 100)
+  }
 })
 </script>
 
@@ -288,10 +294,14 @@ onMounted(() => {
   to { transform: rotate(360deg); }
 }
 
-/* States */
-.loading-state, .empty-state {
-  text-align: center;
-  color: var(--text-muted);
+/* Card loading placeholder */
+.card-loading {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
 }
 
 .loading-spinner {
@@ -301,10 +311,5 @@ onMounted(() => {
   border-top-color: var(--accent-primary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
-  margin: 0 auto 12px;
 }
-
-.empty-icon { font-size: 48px; margin-bottom: 8px; }
-.empty-title { font-size: 16px; font-weight: 700; color: var(--text-primary); margin: 0 0 4px; }
-.empty-desc { font-size: 13px; color: var(--text-muted); margin: 0; }
 </style>
