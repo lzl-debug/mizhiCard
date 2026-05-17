@@ -55,7 +55,7 @@
             <template v-if="selectedFiles.length === 0">
               <div class="drop-icon">📁</div>
               <p class="drop-text">拖拽图片到此处或点击上传</p>
-              <p class="drop-hint">PNG / JPEG / WebP，比例 4:3，支持批量</p>
+              <p class="drop-hint">PNG / JPEG / WebP，支持批量上传</p>
             </template>
             <template v-else>
               <div class="preview-grid">
@@ -64,7 +64,6 @@
                   <div class="preview-overlay">
                     <button class="preview-remove" @click.stop="removeFile(i)">✕</button>
                   </div>
-                  <div class="preview-dims">{{ fileDims[i] || '...' }}</div>
                 </div>
               </div>
             </template>
@@ -127,7 +126,6 @@ const fileInput = ref<HTMLInputElement | null>(null)
 const isDragover = ref(false)
 const selectedFiles = ref<File[]>([])
 const previews = ref<string[]>([])
-const fileDims = ref<string[]>([])
 const errors = ref<string[]>([])
 const uploading = ref(false)
 const uploadSuccess = ref(false)
@@ -169,8 +167,6 @@ function logout() {
 // Upload
 function triggerFileInput() { fileInput.value?.click() }
 
-function validateRatio(w: number, h: number) { return Math.abs(w / h - 4 / 3) < 0.03 }
-
 function addFiles(files: FileList | File[]) {
   errors.value = []
   uploadSuccess.value = false
@@ -179,19 +175,10 @@ function addFiles(files: FileList | File[]) {
       errors.value.push(`"${file.name}" 格式不支持`)
       continue
     }
-    const img = new Image()
     const url = URL.createObjectURL(file)
-    const idx = selectedFiles.value.length
     selectedFiles.value.push(file)
     previews.value.push(url)
-    fileDims.value.push('检测中...')
-    img.onload = () => {
-      fileDims.value[idx] = `${img.width} × ${img.height}`
-      if (!validateRatio(img.width, img.height)) {
-        errors.value.push(`"${file.name}" 比例不是 4:3（当前 ${img.width}×${img.height}）`)
-      }
-    }
-    img.src = url
+    new Image().src = url
   }
 }
 
@@ -233,8 +220,6 @@ async function handleUpload() {
     for (const url of previews.value) URL.revokeObjectURL(url)
     selectedFiles.value = []
     previews.value = []
-    fileDims.value = []
-
     setTimeout(() => { uploadSuccess.value = false }, 3000)
   } else {
     errors.value.push(res.error || '上传失败')

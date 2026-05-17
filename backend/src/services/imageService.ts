@@ -62,14 +62,6 @@ export async function validateAndUploadImage(
     throw new Error('无法解析图片尺寸，请确保上传有效的 PNG/JPEG/WebP 图片')
   }
 
-  const ratio = dims.width / dims.height
-  const targetRatio = 4 / 3
-  if (Math.abs(ratio - targetRatio) > 0.03) {
-    throw new Error(
-      `图片比例必须为 4:3（宽:高 ≈ 1.33），当前图片为 ${dims.width}x${dims.height}（比例 ${ratio.toFixed(2)}）`
-    )
-  }
-
   let ext = '.webp'
   const fileType = file.type.toLowerCase()
   if (fileType === 'image/png') ext = '.png'
