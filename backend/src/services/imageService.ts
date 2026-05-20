@@ -1,4 +1,5 @@
 import type { Env } from '../types'
+import sharp from 'sharp'
 
 function generateId(): string {
   return crypto.randomUUID()
@@ -62,22 +63,19 @@ export async function validateAndUploadImage(
     throw new Error('无法解析图片尺寸，请确保上传有效的 PNG/JPEG/WebP 图片')
   }
 
-  let ext = '.webp'
-  const fileType = file.type.toLowerCase()
-  if (fileType === 'image/png') ext = '.png'
-  else if (fileType === 'image/jpeg') ext = '.jpg'
-  else if (fileType === 'image/webp') ext = '.webp'
+  // Compress image: resize to max 1200px width, convert to WebP quality 80
+  const compressed = await sharp(Buffer.from(buffer))
+    .resize({ width: 1200, withoutEnlargement: true })
+    .webp({ quality: 80 })
+    .toBuffer()
 
-  const imageKey = `${generateId()}${ext}`
+  const imageKey = `${generateId()}.webp`
+  const metadata = { contentType: 'image/webp' }
+  await env.CARD_IMAGES.put(imageKey, compressed, { metadata })
 
-  // Store in KV with content-type metadata
-  const metadata = { contentType: fileType || 'image/webp' }
-  await env.CARD_IMAGES.put(imageKey, buffer, { metadata })
-
-  // Image URL is served via /api/images/:key
   const imageUrl = `/api/images/${imageKey}`
 
-  return { imageKey, imageUrl, contentType: fileType || 'image/webp' }
+  return { imageKey, imageUrl, contentType: 'image/webp' }
 }
 
 export async function deleteImage(imageKey: string, env: Env): Promise<void> {
