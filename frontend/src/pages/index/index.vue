@@ -10,15 +10,31 @@
       <div class="orb orb--3" />
     </div>
 
-    <div class="page-content">
+    <!-- Ritual Intro Page -->
+    <div v-if="!ritualDone" class="ritual-page">
+      <div class="ritual-content">
+        <div class="ritual-sigil">
+          <svg viewBox="0 0 60 60">
+            <circle cx="30" cy="30" r="22" fill="none" stroke="currentColor" stroke-width="0.5" />
+            <circle cx="30" cy="30" r="15" fill="none" stroke="currentColor" stroke-width="0.3" />
+            <rect x="20" y="20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="0.4" transform="rotate(45 30 30)" />
+          </svg>
+        </div>
+        <p class="ritual-line ritual-line--1">闭上眼睛，做3次深呼吸</p>
+        <p class="ritual-line ritual-line--2">我愿意开放聆听潜意识的指引</p>
+        <button class="ritual-btn" @click="enterDraw">我准备好了</button>
+      </div>
+    </div>
+
+    <!-- Main Draw Page -->
+    <div v-else class="page-content page-content--enter">
       <header class="page-header">
         <div class="sigil-line">
           <span class="sigil-dot" />
           <span class="sigil-dash" />
           <span class="sigil-dot" />
         </div>
-        <h1 class="app-title">密之语</h1>
-        <p class="app-subtitle">揭开命运之卡</p>
+        <h1 class="app-title">潜意识想对你说的话</h1>
       </header>
 
       <div class="draw-area">
@@ -75,6 +91,11 @@ const currentCard = ref<Card | null>(null)
 const showCard = ref(false)
 const isDrawing = ref(false)
 const previewVisible = ref(false)
+const ritualDone = ref(false)
+
+function enterDraw() {
+  ritualDone.value = true
+}
 
 function randomCard(): Card | null {
   if (pool.value.length === 0) return null
@@ -209,24 +230,109 @@ onMounted(async () => {
 
 .app-title {
   font-family: 'Noto Serif SC', 'STSong', serif;
-  font-size: 30px;
+  font-size: 20px;
   font-weight: 700;
   color: #3d2832;
   margin: 0;
-  letter-spacing: 0.2em;
-}
-
-.app-subtitle {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 12px;
-  color: rgba(180, 100, 120, 0.6);
-  margin: 6px 0 0;
-  letter-spacing: 0.25em;
-  font-weight: 400;
+  letter-spacing: 0.1em;
 }
 
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Ritual Page */
+.ritual-page {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.ritual-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  text-align: center;
+}
+
+.ritual-sigil {
+  width: 60px;
+  height: 60px;
+  color: rgba(210, 130, 150, 0.4);
+  animation: sigil-breathe 4s ease-in-out infinite, fade-in 1s ease-out both;
+}
+
+.ritual-sigil svg {
+  width: 100%;
+  height: 100%;
+}
+
+.ritual-line {
+  font-family: 'Noto Serif SC', serif;
+  color: #3d2832;
+  margin: 0;
+  opacity: 0;
+  animation: fade-in 1s ease-out forwards;
+}
+
+.ritual-line--1 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  animation-delay: 0.5s;
+}
+
+.ritual-line--2 {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(100, 60, 70, 0.7);
+  letter-spacing: 0.15em;
+  animation-delay: 1.2s;
+}
+
+.ritual-btn {
+  margin-top: 20px;
+  padding: 13px 40px;
+  border: 1px solid rgba(210, 130, 150, 0.35);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #5a3040;
+  font-family: 'Noto Serif SC', serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+  opacity: 0;
+  animation: fade-in 1s ease-out 2s forwards;
+}
+
+.ritual-btn:hover {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(210, 130, 150, 0.6);
+  box-shadow: 0 4px 20px rgba(210, 130, 150, 0.15);
+}
+
+.ritual-btn:active {
+  transform: scale(0.96);
+}
+
+/* Draw page enter animation */
+.page-content--enter {
+  animation: page-enter 0.8s ease-out both;
+}
+
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
