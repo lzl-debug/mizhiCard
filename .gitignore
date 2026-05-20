@@ -6,3 +6,6 @@ dist/
 Thumbs.db
 *.log
 .wrangler/
+deploy.sh
+nginx-mizhi-card.conf
+*.png

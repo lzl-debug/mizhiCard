@@ -4,7 +4,7 @@
     <div v-if="!loggedIn" class="login-page">
       <div class="login-card">
         <div class="login-icon">🔐</div>
-        <h1 class="login-title">秘之卡 · 管理后台</h1>
+        <h1 class="login-title">密之语 · 管理后台</h1>
         <p class="login-desc">请输入管理密钥</p>
         <div class="login-form">
           <input
@@ -28,7 +28,7 @@
     <!-- Logged In -->
     <div v-else class="main-page">
       <header class="header">
-        <h1 class="header-title">秘之卡 · 管理后台</h1>
+        <h1 class="header-title">密之语 · 管理后台</h1>
         <button class="logout-btn" @click="logout">退出</button>
       </header>
 

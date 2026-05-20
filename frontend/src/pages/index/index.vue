@@ -4,7 +4,7 @@
 
     <div class="page-content">
       <header class="page-header">
-        <h1 class="app-title">秘之卡</h1>
+        <h1 class="app-title">密之语</h1>
         <p class="app-subtitle">揭开命运之卡</p>
       </header>
 
@@ -158,8 +158,8 @@ onMounted(async () => {
 
 .card-container {
   perspective: 800px;
-  width: 240px;
-  height: 320px;
+  width: 320px;
+  height: 240px;
 }
 
 .card-face {

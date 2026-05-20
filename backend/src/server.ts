@@ -21,7 +21,7 @@ if (!(globalThis.crypto as any).randomUUID) {
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const PROJECT_ROOT = join(__dirname, '..', '..')
 const DATA_DIR = join(__dirname, '..', 'data')
-const FRONTEND_DIST = join(PROJECT_ROOT, 'frontend', 'dist')
+const FRONTEND_DIST = join(PROJECT_ROOT, 'frontend', 'dist', 'build', 'h5')
 const ADMIN_DIST = join(PROJECT_ROOT, 'admin', 'dist')
 
 const nodeEnv: Env = {

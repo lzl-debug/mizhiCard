@@ -3,7 +3,7 @@
     {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "秘之卡",
+        "navigationBarTitleText": "密之语",
         "navigationStyle": "custom",
         "navigationBarTextStyle": "black",
         "backgroundColor": "#f5f5f7"
