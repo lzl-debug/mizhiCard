@@ -12,6 +12,7 @@
 
     <!-- Ritual Intro Page -->
     <div v-if="!ritualDone" class="ritual-page">
+      <img class="ritual-bg" src="../../images/微信图片_20260520230309_225_436.jpg" />
       <div class="ritual-content">
         <div class="ritual-sigil">
           <svg viewBox="0 0 60 60">
@@ -20,6 +21,7 @@
             <rect x="20" y="20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="0.4" transform="rotate(45 30 30)" />
           </svg>
         </div>
+        <p class="ritual-line ritual-line--title">潜意识想对你说的话</p>
         <p class="ritual-line ritual-line--1">闭上眼睛，做3次深呼吸</p>
         <p class="ritual-line ritual-line--2">我愿意开放聆听潜意识的指引</p>
         <button class="ritual-btn" @click="enterDraw">我准备好了</button>
@@ -253,7 +255,18 @@ onMounted(async () => {
   padding: 24px;
 }
 
+.ritual-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
 .ritual-content {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -281,11 +294,19 @@ onMounted(async () => {
   animation: fade-in 1s ease-out forwards;
 }
 
-.ritual-line--1 {
-  font-size: 20px;
+.ritual-line--title {
+  font-size: 22px;
   font-weight: 700;
-  letter-spacing: 0.1em;
-  animation-delay: 0.5s;
+  letter-spacing: 0.12em;
+  animation-delay: 0.3s;
+}
+
+.ritual-line--1 {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(100, 60, 70, 0.7);
+  letter-spacing: 0.15em;
+  animation-delay: 0.8s;
 }
 
 .ritual-line--2 {
@@ -293,7 +314,7 @@ onMounted(async () => {
   font-weight: 400;
   color: rgba(100, 60, 70, 0.7);
   letter-spacing: 0.15em;
-  animation-delay: 1.2s;
+  animation-delay: 1.5s;
 }
 
 .ritual-btn {
@@ -313,7 +334,7 @@ onMounted(async () => {
   transition: all 0.3s ease;
   -webkit-tap-highlight-color: transparent;
   opacity: 0;
-  animation: fade-in 1s ease-out 2s forwards;
+  animation: fade-in 1s ease-out 2.3s forwards;
 }
 
 .ritual-btn:hover {
