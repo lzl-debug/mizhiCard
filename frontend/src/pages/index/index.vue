@@ -14,13 +14,6 @@
     <div v-if="!ritualDone" class="ritual-page">
       <img class="ritual-bg" src="../../images/微信图片_20260520230309_225_436.jpg" />
       <div class="ritual-content">
-        <div class="ritual-sigil">
-          <svg viewBox="0 0 60 60">
-            <circle cx="30" cy="30" r="22" fill="none" stroke="currentColor" stroke-width="0.5" />
-            <circle cx="30" cy="30" r="15" fill="none" stroke="currentColor" stroke-width="0.3" />
-            <rect x="20" y="20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="0.4" transform="rotate(45 30 30)" />
-          </svg>
-        </div>
         <p class="ritual-line ritual-line--title">潜意识想对你说的话</p>
         <p class="ritual-line ritual-line--1">闭上眼睛，做3次深呼吸</p>
         <p class="ritual-line ritual-line--2">我愿意开放聆听潜意识的指引</p>
@@ -262,18 +255,6 @@ onMounted(async () => {
   text-align: center;
 }
 
-.ritual-sigil {
-  width: 60px;
-  height: 60px;
-  color: rgba(210, 130, 150, 0.4);
-  animation: sigil-breathe 4s ease-in-out infinite, fade-in 1s ease-out both;
-}
-
-.ritual-sigil svg {
-  width: 100%;
-  height: 100%;
-}
-
 .ritual-line {
   font-family: 'Noto Serif SC', serif;
   color: #3d2832;
@@ -283,7 +264,7 @@ onMounted(async () => {
 }
 
 .ritual-line--title {
-  font-size: 26px;
+  font-size: 30px;
   font-weight: 700;
   letter-spacing: 0.12em;
   animation-delay: 0.3s;
