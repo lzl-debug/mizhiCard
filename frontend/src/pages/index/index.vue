@@ -45,14 +45,7 @@
           <div class="card-shadow" :class="{ 'is-active': showCard }" />
           <div class="card-container" :class="{ 'is-flipped': showCard }">
             <div class="card-face card-back">
-              <div class="card-back-inner">
-                <div class="card-back-frame" />
-                <svg viewBox="0 0 60 60" class="card-back-sigil">
-                  <circle cx="30" cy="30" r="22" fill="none" stroke="currentColor" stroke-width="0.5" />
-                  <circle cx="30" cy="30" r="15" fill="none" stroke="currentColor" stroke-width="0.3" />
-                  <rect x="20" y="20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="0.4" transform="rotate(45 30 30)" />
-                </svg>
-              </div>
+              <img src="../../images/backImg.jpg" class="card-back-img" />
             </div>
             <div class="card-face card-front" @click="openPreview">
               <img v-if="currentCard" :src="currentCard.imageUrl" class="card-img" />
@@ -393,7 +386,7 @@ onMounted(async () => {
 .card-container {
   perspective: 1000px;
   width: 320px;
-  height: 240px;
+  height: 180px;
   animation: gentle-float 5s ease-in-out infinite;
 }
 
@@ -419,33 +412,10 @@ onMounted(async () => {
   transform: rotateY(0deg);
 }
 
-.card-back-inner {
+.card-back-img {
   width: 100%;
   height: 100%;
-  background: linear-gradient(155deg, #fce8ed 0%, #f5dce2 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.card-back-frame {
-  position: absolute;
-  inset: 12px;
-  border: 1px solid rgba(210, 130, 150, 0.25);
-  border-radius: 8px;
-}
-
-.card-back-sigil {
-  width: 50px;
-  height: 50px;
-  color: rgba(210, 130, 150, 0.4);
-  animation: sigil-breathe 4s ease-in-out infinite;
-}
-
-@keyframes sigil-breathe {
-  0%, 100% { opacity: 0.4; transform: scale(1) rotate(0deg); }
-  50% { opacity: 0.6; transform: scale(1.02) rotate(2deg); }
+  object-fit: cover;
 }
 
 .card-front {
@@ -457,7 +427,8 @@ onMounted(async () => {
 .card-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  background: #fdf0f3;
 }
 
 .is-flipped .card-back {
