@@ -21,7 +21,7 @@ export async function getAllCards(env: Env): Promise<Card[]> {
     name: row.name,
     rarity: row.rarity,
     imageKey: row.image_key,
-    imageUrl: `/api/images/${row.image_key}`,
+    imageUrl: `/mizhiCard/api/images/${row.image_key}`,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   }))
@@ -48,7 +48,7 @@ export async function getCardById(id: string, env: Env): Promise<Card | null> {
     name: row.name,
     rarity: row.rarity,
     imageKey: row.image_key,
-    imageUrl: `/api/images/${row.image_key}`,
+    imageUrl: `/mizhiCard/api/images/${row.image_key}`,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   }

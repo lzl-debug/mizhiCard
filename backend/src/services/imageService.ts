@@ -73,7 +73,7 @@ export async function validateAndUploadImage(
   const metadata = { contentType: 'image/webp' }
   await env.CARD_IMAGES.put(imageKey, compressed, { metadata })
 
-  const imageUrl = `/api/images/${imageKey}`
+  const imageUrl = `/mizhiCard/api/images/${imageKey}`
 
   return { imageKey, imageUrl, contentType: 'image/webp' }
 }

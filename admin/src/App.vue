@@ -86,15 +86,31 @@
 
         <!-- Card List -->
         <div class="section">
-          <h2 class="section-title">已上传卡牌（{{ cards.length }}）</h2>
+          <div class="section-header">
+            <h2 class="section-title">已上传卡牌（{{ cards.length }}）</h2>
+            <div v-if="cards.length > 0" class="batch-actions">
+              <button v-if="!selectMode" class="batch-btn" @click="enterSelectMode">批量选择</button>
+              <template v-else>
+                <button class="batch-btn" @click="selectAll">{{ selectedIds.size === cards.length ? '取消全选' : '全选' }}</button>
+                <button class="batch-btn danger" :disabled="selectedIds.size === 0 || batchDeleting" @click="handleBatchDelete">
+                  <span v-if="batchDeleting" class="spinner-sm" />
+                  <span v-else>删除 ({{ selectedIds.size }})</span>
+                </button>
+                <button class="batch-btn" @click="exitSelectMode">取消</button>
+              </template>
+            </div>
+          </div>
           <div v-if="cards.length === 0" class="empty-list">暂无卡牌</div>
           <div v-else class="card-grid">
-            <div v-for="card in cards" :key="card.id" class="card-item">
+            <div v-for="card in cards" :key="card.id" class="card-item" :class="{ selected: selectedIds.has(card.id) }" @click="selectMode && toggleSelect(card.id)">
+              <div v-if="selectMode" class="card-checkbox" :class="{ checked: selectedIds.has(card.id) }">
+                <span v-if="selectedIds.has(card.id)">✓</span>
+              </div>
               <div class="card-img">
                 <img :src="card.imageUrl" :alt="card.name" />
               </div>
               <span class="card-name">{{ card.name }}</span>
-              <button class="card-del" :disabled="deletingId === card.id" @click="handleDelete(card.id)">
+              <button v-if="!selectMode" class="card-del" :disabled="deletingId === card.id" @click="handleDelete(card.id)">
                 <span v-if="deletingId === card.id" class="spinner-sm" />
                 <span v-else>✕</span>
               </button>
@@ -110,7 +126,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { post, authGet, authDel, uploadForm } from './utils/request'
+import { post, authGet, authDel, authPost, uploadForm } from './utils/request'
 import { safeGetItem, safeSetItem, safeRemoveItem } from './utils/storage'
 
 // Auth
@@ -139,6 +155,11 @@ interface Card {
 const cards = ref<Card[]>([])
 const deletingId = ref<string | null>(null)
 const globalError = ref('')
+
+// Batch delete
+const selectMode = ref(false)
+const selectedIds = ref<Set<string>>(new Set())
+const batchDeleting = ref(false)
 
 // Auth
 async function handleLogin() {
@@ -246,6 +267,42 @@ async function handleDelete(id: string) {
     globalError.value = '删除失败'
   }
   deletingId.value = null
+}
+
+function enterSelectMode() { selectMode.value = true; selectedIds.value = new Set() }
+function exitSelectMode() { selectMode.value = false; selectedIds.value = new Set() }
+
+function toggleSelect(id: string) {
+  const s = new Set(selectedIds.value)
+  if (s.has(id)) s.delete(id); else s.add(id)
+  selectedIds.value = s
+}
+
+function selectAll() {
+  if (selectedIds.value.size === cards.value.length) {
+    selectedIds.value = new Set()
+  } else {
+    selectedIds.value = new Set(cards.value.map(c => c.id))
+  }
+}
+
+async function handleBatchDelete() {
+  if (selectedIds.value.size === 0) return
+  if (!confirm(`确定删除选中的 ${selectedIds.value.size} 张卡牌？`)) return
+  batchDeleting.value = true
+  const res = await authPost<{ deleted: string[]; failed: string[] }>(
+    '/admin/cards/batch-delete', adminKey.value, { ids: [...selectedIds.value] }
+  )
+  if (res.success && res.data) {
+    cards.value = cards.value.filter(c => !res.data!.deleted.includes(c.id))
+    if (res.data.failed.length > 0) {
+      globalError.value = `${res.data.failed.length} 张卡牌删除失败`
+    }
+  } else {
+    globalError.value = res.error || '批量删除失败'
+  }
+  batchDeleting.value = false
+  exitSelectMode()
 }
 
 onMounted(() => {
@@ -369,6 +426,25 @@ $success: #22C55E;
   display: flex; align-items: center; gap: 10px; padding: 8px; border-radius: 10px;
   background: $bg-card; border: 1px solid rgba(0, 0, 0, 0.06);
   transition: all 0.3s;
+  &.selected { border-color: $accent; background: rgba(99,102,241,0.04); }
+}
+.card-checkbox {
+  width: 20px; height: 20px; border-radius: 4px; border: 2px solid rgba(0,0,0,0.2);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  font-size: 12px; color: white; transition: all 0.2s;
+  &.checked { background: $accent; border-color: $accent; }
+}
+.section-header {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+}
+.batch-actions { display: flex; gap: 8px; align-items: center; }
+.batch-btn {
+  padding: 5px 12px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.12);
+  background: $bg-card; color: $sub; font-size: 12px; cursor: pointer; font-family: inherit;
+  transition: all 0.2s;
+  &:hover { border-color: $accent; color: $accent; }
+  &.danger { color: $danger; border-color: rgba($danger, 0.3); &:hover { border-color: $danger; } }
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
 }
 .card-img {
   width: 40px; height: 53px; border-radius: 4px; overflow: hidden; flex-shrink: 0;

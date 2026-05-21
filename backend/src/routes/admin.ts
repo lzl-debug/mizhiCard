@@ -109,16 +109,41 @@ adminRouter.delete('/cards/:id', async (c) => {
       return c.json({ success: false, error: '卡牌不存在' }, 404)
     }
 
-    // Clean up the image from KV
     try {
       await deleteImage(card.imageKey, c.env)
     } catch {
-      // Image deletion is best-effort; don't fail the request
     }
 
     return c.json({ success: true, data: { deleted: true } })
   } catch (error) {
     return c.json({ success: false, error: '删除卡牌失败' }, 500)
+  }
+})
+
+// POST /api/admin/cards/batch-delete - delete multiple cards
+adminRouter.post('/cards/batch-delete', async (c) => {
+  try {
+    const { ids } = await c.req.json<{ ids: string[] }>()
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return c.json({ success: false, error: '请提供要删除的卡牌ID列表' }, 400)
+    }
+
+    const deleted: string[] = []
+    const failed: string[] = []
+
+    for (const id of ids) {
+      const card = await deleteCard(id, c.env)
+      if (card) {
+        deleted.push(id)
+        try { await deleteImage(card.imageKey, c.env) } catch {}
+      } else {
+        failed.push(id)
+      }
+    }
+
+    return c.json({ success: true, data: { deleted, failed } })
+  } catch (error) {
+    return c.json({ success: false, error: '批量删除失败' }, 500)
   }
 })
 
