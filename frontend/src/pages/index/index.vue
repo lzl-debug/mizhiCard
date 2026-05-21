@@ -120,11 +120,6 @@ function closePreview() {
 
 onMounted(async () => {
   await fetchCards()
-  const card = randomCard()
-  if (card) {
-    currentCard.value = card
-    setTimeout(() => { showCard.value = true }, 100)
-  }
 })
 </script>
 
@@ -288,7 +283,7 @@ onMounted(async () => {
 }
 
 .ritual-line--title {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 700;
   letter-spacing: 0.12em;
   animation-delay: 0.3s;
